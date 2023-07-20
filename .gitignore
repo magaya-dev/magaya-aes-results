@@ -1,0 +1,7 @@
+node_modules
+responses
+extension.config.json
+extensions-data
+errors
+combined.log
+error.log

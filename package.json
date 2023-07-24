@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "npm link @magaya/hyperion-node",
+    "install-sw": "npm install && npm shrinkwrap",
+    "semantic-release": "npx semantic-release",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Magaya Corporation",
@@ -14,5 +16,35 @@
     "@magaya/socket-tunnel-node": "^0.2.4",
     "commander": "^8.3.0",
     "express": "^4.18.2"
-  }
+  },
+  "devDependencies": {
+    "@semantic-release/git": "^9.0.0",
+    "semantic-release": "^17.0.0"
+  },
+  "release": {
+    "plugins": [
+        "@semantic-release/commit-analyzer",
+        "@semantic-release/github",
+        "@semantic-release/npm",
+        "@semantic-release/release-notes-generator",
+        [
+            "@semantic-release/git",
+            {
+                "assets": [
+                    "package.json",
+                    "npm-shrinkwrap.json"
+                ],
+                "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+            }
+        ]
+    ],
+    "branches": [
+        "prod",
+        {
+            "name": "main",
+            "prerelease": true,
+            "channel": "beta"
+        }
+    ]
+}
 }

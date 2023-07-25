@@ -1,5 +1,5 @@
 {
-  "name": "magaya-aes-results",
+  "name": "@magaya/magaya-aes-results",
   "version": "1.0.0-main.1",
   "description": "",
   "main": "index.js",

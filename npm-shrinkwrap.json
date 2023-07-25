@@ -1,12 +1,12 @@
 {
-  "name": "magaya-aes-results",
-  "version": "1.0.0-main.1",
+  "name": "@magaya/magaya-aes-results",
+  "version": "1.0.0-main.2",
   "lockfileVersion": 2,
   "requires": true,
   "packages": {
     "": {
-      "name": "magaya-aes-results",
-      "version": "1.0.0-main.1",
+      "name": "@magaya/magaya-aes-results",
+      "version": "1.0.0-main.2",
       "hasInstallScript": true,
       "license": "MIT",
       "dependencies": {

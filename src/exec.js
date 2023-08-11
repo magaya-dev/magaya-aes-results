@@ -83,13 +83,13 @@ function exec(dbhelper) {
 
     const doMessageWork = async (data) => {
 
-        const waybill = data.WayBill;
+        const guid = data.guid;
 
-        const trans = await GetShipmentByGuid(waybill);
+        const trans = await GetShipmentByGuid(guid);
         if (trans) {
             const step1 = await insertAESresult(trans, data);
             if (step1) {
-                const step2 = await insertCustomMessage(waybill, data);
+                const step2 = await insertCustomMessage(guid, data);
                 if (step2) {
                     return { succes: true }
                 };

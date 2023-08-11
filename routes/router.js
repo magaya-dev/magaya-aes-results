@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const exec = require('../src/exec')
-const getDataFromXml = require('./converter')
+const getDataFromXml = require('../src/converter')
 
 function route(dbhelper) {
 
@@ -14,7 +14,7 @@ function route(dbhelper) {
 
     router.post(`/saveAESresults`, async (req, resp) => {
         //const waybill = req.params && req.params.waybill;
-        const data = getDataFromXml(req.body);
+        const data = await getDataFromXml(req.body);
         const ams = await doMessageWork(data);
         console.log(JSON.stringify(ams, null, '\t'));
 

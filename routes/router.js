@@ -13,7 +13,7 @@ function route(dbhelper) {
     });
 
     router.post(`/saveAESresults`, async (req, resp) => {
-        //const waybill = req.params && req.params.waybill;
+
         const data = await getDataFromXml(req.body);
         const ams = await doMessageWork(data);
         console.log(JSON.stringify(ams, null, '\t'));

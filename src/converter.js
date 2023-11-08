@@ -1,6 +1,5 @@
 const ExtensionId = require("../package.json").name;
 const aitn = "Assigned Internal Transaction Number";
-const xml2js = require('./xml2js')
 
 function toDate(sd) {
 	try {
@@ -11,14 +10,14 @@ function toDate(sd) {
 	}
 }
 
-function getComments(js) {
-	const comments = js.ES1.reduce((msg, es1) => {
+function getComments(esOnes) {
+	const comments = esOnes.reduce((msg, es1) => {
 		let desc = '';
-		if (es1.ResponseCode) {
-			desc = `Response Code: ${es1.ResponseCode}; `;
+		if (es1.responseCode) {
+			desc = `Response Code: ${es1.responseCode}; `;
 		}
-		if (es1.NarrativeText) {
-			desc += `Narrative Text: ${es1.NarrativeText};`
+		if (es1.narrativeText) {
+			desc += `Narrative Text: ${es1.narrativeText};`;
 		}
 		msg = msg + (desc && (desc + '\n'));
 		return msg;
@@ -26,31 +25,32 @@ function getComments(js) {
 	return comments;
 }
 
-function getITN(js) {
-	const itn = js.ES1.find( es1 => es1.ResponseCode >= 900  && es1.ResponseCode <= 1000);
+function getITN(esOnes) {
+	const itn = esOnes.find( es1 => es1.responseCode >= 900  && es1.responseCode <= 1000);
 	return (itn && itn.AESInternalTransactionNo) || '';
 
 }
 function getStatus(js) {
-	const itn = js.ES1.find( es1 => es1.ResponseCode >= 900  && es1.ResponseCode <= 1000);
-	return (itn && itn.NarrativeText) || '';
+	const itn = js.find( es1 => es1.responseCode >= 900  && es1.responseCode <= 1000);
+	return (itn && itn.narrativeText) || '';
 }
 
 module.exports = async ({ aesContent, mgyShipmentGuid }) => {
 
-	const jsDetails = await xml2js(aesContent.ResponseDetails);
+	//const jsDetails = await xml2js(aesContent.ResponseDetails);
+	const jsDetails = aesContent.esOnes || [];
 
 	return {
 		//Comments: aesContent.ResponseMessage,
-		Comments: (jsDetails ? getComments(jsDetails) : '' ) + aesContent.ResponseMessage,
-		Data: aesContent.ResponseDetails,
+		Comments: getComments(jsDetails) + aesContent.responseMessage,
+		Data: aesContent.responseDetails,
 		ExtensionId,
 		TransactionType: "Acelynk message",
-		AESITNNumber: jsDetails ?  getITN(jsDetails) : '',
-		AESStatus: jsDetails ? getStatus(jsDetails) : '',
-		AESXTNNumber: aesContent.TransactionID,
-		ToBeDecided: aesContent.RequestCorrelationID,
-		AESFilingDate: toDate(aesContent.CreatedDateTime),
+		AESITNNumber: getITN(jsDetails),
+		AESStatus: getStatus(jsDetails),
+		AESXTNNumber: aesContent.transactionID,
+		ToBeDecided: aesContent.requestCorrelationID,
+		AESFilingDate: toDate(aesContent.createdDateTime),
 		guid: mgyShipmentGuid,
 	};
 };
